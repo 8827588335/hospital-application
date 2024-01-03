@@ -1,0 +1,235 @@
+
+entity Hospital {
+	name String
+    hospitalType String
+    email String
+    phoneNumber String
+    websiteUrl String
+    gstNumber String
+    registration String
+    status String
+    lastModified Instant
+    lastModifiedBy String
+}
+entity Department{
+	departmentName String
+    hospitalId Long
+    status String
+    lastModified Instant
+    lastModifiedBy String
+}
+
+entity Address{
+	country String
+    state String
+	city String
+    pincode String
+    line String
+    refTable String
+    refTableId Long
+    hospitalId Long
+    status String
+    lastModified Instant
+    lastModifiedBy String    
+}
+
+entity Doctor{
+	firstName String
+    lastName String
+    phoneNumber String
+    email String
+    specialization String
+    age String
+    isPrivate Boolean
+    hospitalId Long
+	status String
+    lastModified Instant
+    lastModifiedBy String    
+}
+
+entity Qualification{
+	name String
+    collageName String 
+    degree String
+    graduationYear String
+    postGraduationYear String
+    refTable String
+    refTableId Long
+    hospitalId Long
+    status String
+    lastModified Instant
+    lastModifiedBy String    
+    
+}
+
+entity Staff {
+    name String
+    employeeId Long
+    email String
+    phoneNumber String 
+    clockInPin String
+    allowedPatientRatio Long
+    hireDate Instant
+    hospitalId Long
+    status String
+    lastModified Instant
+    lastModifiedBy String
+}
+entity Patient{
+    firstName String
+    lastName String
+    gender String
+    bloodGroup String
+    patientUniqueId String
+    dateOfBirth LocalDate
+    admittedDate String
+    checkedOutDate String
+    profileStatus String
+    note String
+    roomId Long
+    status String
+    hospitalId Long
+    lastModified Instant
+    lastModifiedBy String
+}
+
+entity Room { 
+    name String
+    maxCapacity Long
+    noOfBed Long
+    roomNumber Long 
+    staffRatio String
+    hospitalId Long 
+    status String
+    lastModified Instant
+    lastModifiedBy String
+  }
+  
+entity Test{
+	name String
+    time LocalTime
+    date Instant
+    result String
+    departmentId String
+    roomId String
+    amount Double
+    balanceAmount Double
+    paidAmount Double
+    hospitalId Long 
+    status String
+    lastModified Instant
+    lastModifiedBy String
+}
+
+entity Assets {
+    assetName String
+    assetype String 
+    assetId String 
+    purchaseFrom String
+    purchaseTo String
+    manufacturer String
+    model String
+    productNumber String
+    supplier String
+    warrantyInMonths Long
+    condition String
+    value Double
+    description String
+    assetStatus String  
+    assetUserId Long
+    status String
+    submittedAmt Double
+    refundAmt Double
+    fineAmt Double
+    hospitalId Long
+    lastModified Instant
+    lastModifiedBy String
+}
+
+entity AssetsApplication {
+    assetId Long
+    assetype String
+    quantity Long
+    description String
+    reqStatus String
+    applyDate Instant
+    assginDate Instant
+    roomId Long
+    patientId Long
+    staffId Long
+    doctorId Long
+    status String
+    hospitalId Long
+    lastModified Instant
+    lastModifiedBy String
+}
+
+entity Medicines{
+	name String
+    type String 
+    mfgDate String
+    expireDate String
+    rate Double
+    discount Double
+    quantity String
+    total Double
+    timing String
+    status String
+    hospitalId Long
+    lastModified Instant
+    lastModifiedBy String
+}
+
+entity OxygenSource{
+	name String 
+    type String
+    noOfCylinders String
+    location String
+    capacity String
+    lastRefillDate String
+    status String
+    hospitalId Long
+    lastModified Instant
+    lastModifiedBy String
+}
+
+entity OxygenUse{
+	oxygenSourceId Long 
+    useDate String
+    startTime Instant
+    endTime Instant
+    quantityUsed Double
+    patientId Long
+    status String
+    hospitalId Long
+    lastModified Instant
+    lastModifiedBy String
+}
+relationship ManyToOne {
+	Department{employee} to Employee
+}
+
+relationship ManyToMany{
+    Staff{room(name)} to Room{staff(firstName)}
+    Staff{department(departmentName)} to Department{staff(firstName)}
+    Doctor{patient(firstName)} to Patient{doctor(firstName)}
+    Doctor{test(name)} to Test{doctor(firstName)}
+    Test{patient(firstName)} to Patient{test(name)}
+    Medicines{patient(firstName)} to Patient{medicines(name)}
+    Doctor{medicines(name)} to Medicines{doctor(firstName)}
+    Doctor{department(departmentName)} to Department{doctor(firstName)}    
+}
+ // Set pagination options
+paginate * with infinite-scroll
+paginate * with pagination
+
+// Use Data Transfert Objects (DTO)
+dto * with mapstruct
+
+// Set service options to all except few
+service * with serviceClass
+
+filter *
+// Set an angular suffix
+// angularSuffix * with tvg
+
